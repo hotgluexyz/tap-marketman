@@ -172,9 +172,7 @@ class MarketmanStream(RESTStream):
             return
         if isinstance(body, dict) and body.get("IsSuccess") is False:
             error = body.get("ErrorMessage") or "Unknown error"
-            raise FatalAPIError(
-                f"Marketman {self.name} returned IsSuccess=false: {error}"
-            )
+            raise FatalAPIError(f"Marketman {self.name} returned IsSuccess=false: {error}")
 
 
 class DateFilteredMarketmanStream(MarketmanStream):

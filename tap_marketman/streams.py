@@ -245,11 +245,16 @@ class InventoryCountsStream(DateFilteredMarketmanStream):
                     th.Property("ParentItemID", th.StringType),
                     th.Property("TotalCount", th.NumberType),
                     th.Property("TotalValue", th.NumberType),
-                    th.Property("CountDefDetails", th.ArrayType(th.PropertiesList(
-                        th.Property("CountDefID", th.IntegerType),
-                        th.Property("CountDefName", th.StringType),
-                        th.Property("CountDefAmount", th.NumberType),
-                    ))),
+                    th.Property(
+                        "CountDefDetails",
+                        th.ArrayType(
+                            th.PropertiesList(
+                                th.Property("CountDefID", th.IntegerType),
+                                th.Property("CountDefName", th.StringType),
+                                th.Property("CountDefAmount", th.NumberType),
+                            )
+                        ),
+                    ),
                 ),
             ),
         ),

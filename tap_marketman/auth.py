@@ -30,14 +30,10 @@ def fetch_auth_token(api_url: str, api_key: str, api_password: str) -> str:
     try:
         resp.raise_for_status()
     except requests.HTTPError as exc:
-        raise RuntimeError(
-            f"Marketman GetToken failed [{resp.status_code}]: {resp.text}"
-        ) from exc
+        raise RuntimeError(f"Marketman GetToken failed [{resp.status_code}]: {resp.text}") from exc
     data = resp.json()
     if not data.get("IsSuccess") or not data.get("Token"):
-        raise RuntimeError(
-            f"Marketman GetToken returned an error: {data.get('ErrorMessage')}"
-        )
+        raise RuntimeError(f"Marketman GetToken returned an error: {data.get('ErrorMessage')}")
     return data["Token"]
 
 
