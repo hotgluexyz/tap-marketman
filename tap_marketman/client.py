@@ -136,7 +136,7 @@ class MarketmanStream(RESTStream):
     def post_process(
         self,
         row: dict,
-        context: dict | None = None,  # noqa: ARG002
+        context: dict | None = None,
     ) -> dict | None:
         """Convert Marketman's ``yyyy/mm/dd HH:MM:SS`` timestamps to ISO 8601.
 
