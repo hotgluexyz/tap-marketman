@@ -38,7 +38,6 @@ s3 = [
 ]
 
 [project.scripts]
-# CLI declaration
 tap-marketman = 'tap_marketman.tap:TapMarketman.cli'
 
 [dependency-groups]
