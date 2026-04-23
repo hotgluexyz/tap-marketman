@@ -1,0 +1,51 @@
+send_anonymous_usage_stats: true
+project_id: "tap-marketman"
+default_environment: test
+requires_meltano: ">=4.0"
+environments:
+- name: test
+plugins:
+  extractors:
+  - name: "tap-marketman"
+    namespace: "tap_marketman"
+    pip_url: -e .
+    capabilities:
+    - state
+    - catalog
+    - discover
+    - about
+    - stream-maps
+    - structured-logging
+
+    settings:
+    - name: api_key
+      label: API Key
+      description: Marketman API Partner key.
+      sensitive: true
+
+    - name: api_password
+      label: API Password
+      description: Marketman API Partner password.
+      sensitive: true
+
+    - name: buyer_guid
+      label: Buyer GUID
+      description: >
+        Marketman BuyerGuid to sync. If omitted, the first authorised buyer
+        returned by GetAuthorisedAccounts is used.
+
+    - name: start_date
+      kind: date_iso8601
+      label: Start Date
+      description: The earliest record date to sync (ISO-8601).
+
+    settings_group_validation:
+    - [api_key, api_password]
+
+    config:
+      start_date: 2020-01-01T00:00:00Z
+
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl

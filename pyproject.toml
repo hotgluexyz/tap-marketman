@@ -1,0 +1,123 @@
+[build-system]
+requires = [
+    "hatchling>=1,<2",
+    "hatch-vcs>=0.5",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "tap-marketman"
+dynamic = ["version"]
+description = "Singer tap for Marketman, built with Hotglue's hotglue_singer_sdk."
+readme = "README.md"
+authors = [{ name = "César Lima"}]
+keywords = [
+    "ELT",
+    "Marketman",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+license-files = [ "LICENSE" ]
+requires-python = ">=3.10"
+dependencies = [
+    "hotglue-singer-sdk>=1.0.28",
+    "requests~=2.33.0",
+    "typing-extensions>=4.5.0; python_version < '3.13'",
+]
+
+[project.optional-dependencies]
+s3 = [
+    "s3fs>=2026.1.0",
+]
+
+[project.scripts]
+tap-marketman = 'tap_marketman.tap:TapMarketman.cli'
+
+[dependency-groups]
+dev = [
+    { include-group = "test" },
+]
+test = [
+    "pytest>=9",
+    "hotglue-singer-sdk",
+]
+typing = [
+    "mypy>=1.19.1",
+    "ty>=0.0.18",
+    "types-requests",
+]
+
+[tool.hatch.version]
+fallback-version = "0.1.0.dev0"
+source = "vcs"
+
+[tool.mypy]
+enable_error_code = [
+    "ignore-without-code",
+    "redundant-expr",
+    "truthy-bool",
+]
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[tool.ty.rules]
+unused-type-ignore-comment = "ignore"
+
+[tool.pytest]
+addopts = [
+    "-ra",
+]
+filterwarnings = [
+    "error",
+    "once:No records were available to test:UserWarning",
+    "once:Fields in transformed catalog but not in records:UserWarning",
+]
+log_level = "INFO"
+minversion = "9"
+strict = true
+testpaths = [
+    "tests",
+]
+
+# Ruff config lives in `ruff.toml` (single source of truth; ruff prefers it over pyproject).
+
+# This configuration can be used to customize tox environments.
+# Note: env_run_base uses uv-venv-lock-runner, which requires a `uv.lock` file.
+# Run `uv lock` (https://docs.astral.sh/uv/) once to generate it before invoking tox locally.
+[tool.tox]
+requires = [
+    "tox>=4.43",
+    "tox-uv",
+]
+env_list = [
+    "typing",
+    { product = [
+        { prefix = "3.", start = 10 },
+    ] },
+]
+
+[tool.tox.env_run_base]
+description = "run tests on Python {env_name}"
+runner = "uv-venv-lock-runner"
+pass_env = [
+    "TAP_MARKETMAN_*",
+]
+dependency_groups = [ "test" ]
+commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+
+[tool.tox.env.typing]
+description = "type checks"
+dependency_groups = [ "test", "typing" ]
+commands = [
+    [ "mypy", { replace = "posargs", default = [ "tap_marketman", "tests" ], extend = true } ],
+    [ "ty", "check", { replace = "posargs", default = [ "tap_marketman", "tests" ], extend = true } ],
+]
