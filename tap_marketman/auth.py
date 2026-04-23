@@ -15,12 +15,14 @@ from __future__ import annotations
 
 import requests
 
+from tap_marketman.client import API_BASE_URL
+
 REQUEST_TIMEOUT_SECONDS = 60
 
 
-def fetch_auth_token(api_url: str, api_key: str, api_password: str) -> str:
+def fetch_auth_token(api_key: str, api_password: str) -> str:
     """Exchange the API key/password for a Marketman ``AUTH_TOKEN``."""
-    url = f"{api_url}/buyers/auth/GetToken"
+    url = f"{API_BASE_URL}/buyers/auth/GetToken"
     resp = requests.post(
         url,
         json={"APIKey": api_key, "APIPassword": api_password},
@@ -37,9 +39,9 @@ def fetch_auth_token(api_url: str, api_key: str, api_password: str) -> str:
     return data["Token"]
 
 
-def fetch_first_buyer_guid(api_url: str, auth_token: str) -> str:
+def fetch_first_buyer_guid(auth_token: str) -> str:
     """Return the first ``BuyerGuid`` accessible to ``auth_token``."""
-    url = f"{api_url}/buyers/partneraccounts/GetAuthorisedAccounts"
+    url = f"{API_BASE_URL}/buyers/partneraccounts/GetAuthorisedAccounts"
     resp = requests.post(
         url,
         headers={

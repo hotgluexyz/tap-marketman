@@ -60,28 +60,16 @@ class TapMarketman(Tap):
             description="The earliest record date to sync (ISO-8601).",
             default="2020-01-01T00:00:00Z",
         ),
-        th.Property(
-            "api_url",
-            th.StringType,
-            description="Base URL for the Marketman API.",
-            default="https://api.marketman.com/v3",
-        ),
     ).to_dict()
 
     _auth_token: str | None = None
     _buyer_guid: str | None = None
 
     @property
-    def api_url(self) -> str:
-        """Return the configured API base URL."""
-        return self.config["api_url"]
-
-    @property
     def auth_token(self) -> str:
         """Fetch and cache the Marketman ``AUTH_TOKEN`` for this tap instance."""
         if self._auth_token is None:
             self._auth_token = fetch_auth_token(
-                api_url=self.api_url,
                 api_key=self.config["api_key"],
                 api_password=self.config["api_password"],
             )
@@ -93,7 +81,6 @@ class TapMarketman(Tap):
         if self._buyer_guid is None:
             configured = self.config.get("buyer_guid")
             self._buyer_guid = configured or fetch_first_buyer_guid(
-                api_url=self.api_url,
                 auth_token=self.auth_token,
             )
         return self._buyer_guid

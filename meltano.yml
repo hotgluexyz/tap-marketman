@@ -39,16 +39,11 @@ plugins:
       label: Start Date
       description: The earliest record date to sync (ISO-8601).
 
-    - name: api_url
-      label: API URL
-      description: Base URL for the Marketman API.
-
     settings_group_validation:
     - [api_key, api_password]
 
     config:
       start_date: 2020-01-01T00:00:00Z
-      api_url: https://api.marketman.com/v3
 
   loaders:
   - name: target-jsonl

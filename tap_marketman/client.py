@@ -21,8 +21,8 @@ from typing_extensions import override
 if TYPE_CHECKING:
     from tap_marketman.tap import TapMarketman
 
+API_BASE_URL = "https://api.marketman.com/v3"
 DATETIME_FMT = "%Y/%m/%d %H:%M:%S"
-
 PAGE_SIZE = 500
 
 
@@ -47,9 +47,8 @@ class MarketmanStream(RESTStream):
     @override
     @property
     def url_base(self) -> str:
-        """Return the API base URL (configurable via the ``api_url`` setting)."""
-        tap: TapMarketman = self._tap  # type: ignore[assignment]
-        return tap.api_url
+        """Return the Marketman API base URL."""
+        return API_BASE_URL
 
     @override
     @property

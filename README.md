@@ -7,7 +7,7 @@ A [Singer](https://www.singer.io/) tap that extracts data from **Marketman**. It
 - POST-based JSON HTTP streams against the Marketman REST API (see `client.py` / `streams.py`).
 - API-key + password authentication: the tap exchanges your credentials for a short-lived `AUTH_TOKEN` (via `POST /buyers/auth/GetToken`) and attaches it to every subsequent request as an `AUTH_TOKEN` header (see `auth.py`).
 - Automatic `BuyerGuid` discovery — if `buyer_guid` is not configured, the first authorised buyer returned by `GetAuthorisedAccounts` is used.
-- Configurable `api_url`, `start_date`, and optional `buyer_guid` (see [Configuration](#configuration)).
+- Configurable `start_date` and optional `buyer_guid` (see [Configuration](#configuration)).
 - Incremental sync where the API supports it: `inventory_items` and `preps` use `UpdateDate`, while `inventory_counts`, `transfers`, and `waste_events` use a UTC `DateTimeFromUTC`/`DateTimeToUTC` window. `locations` and `menu_items` are full-refresh.
 
 ### Streams
@@ -71,7 +71,6 @@ tap-marketman --help
 | `api_password` | string | yes | — | Marketman API Partner password. |
 | `buyer_guid` | string | no | first authorised buyer | `BuyerGuid` to sync. If omitted, the first buyer returned by `GetAuthorisedAccounts` is used. |
 | `start_date` | string (datetime) | no | `2020-01-01T00:00:00Z` | Earliest record date to sync (ISO-8601). |
-| `api_url` | string | no | `https://api.marketman.com/v3` | Base URL for the Marketman API. |
 
 Run `tap-marketman --about` (or `tap-marketman --about --format=markdown`) for the authoritative schema for your installed version.
 
@@ -82,8 +81,7 @@ Run `tap-marketman --about` (or `tap-marketman --about --format=markdown`) for t
   "api_key": "YOUR_API_KEY",
   "api_password": "YOUR_API_PASSWORD",
   "buyer_guid": "00000000-0000-0000-0000-000000000000",
-  "start_date": "2020-01-01T00:00:00Z",
-  "api_url": "https://api.marketman.com/v3"
+  "start_date": "2020-01-01T00:00:00Z"
 }
 ```
 
